@@ -10,32 +10,180 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <name>doecs-web</name>
+    <description>web common library of doecs</description>
+    <url>https://github.com/doecs/doecs-web</url>
+
     <groupId>com.doecs</groupId>
     <artifactId>doecs-web</artifactId>
     <version>2.0.1</version>
+    <packaging>jar</packaging>
 
+    <developers>
+        <developer>
+            <name>jayhao</name>
+            <email>jayhao678@qq.com</email>
+            <organization>http://www.doecs.com</organization>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GPL-3.0</name>
+            <url>https://opensource.org/licenses/GPL-3.0</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/doecs/doecs-web.git</connection>
+        <developerConnection>scm:git:https://github.com/doecs/doecs-web.git</developerConnection>
+        <url>https://github.com/doecs/doecs-web.git</url>
+    </scm>
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java-version>1.8</java-version>
         <servlet.version>3.1.0</servlet.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://repo.doecs.com/repository/maven-releases/</url>
-        </repository>
-    </repositories>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>maven-releases</id>-->
+<!--            <url>http://repo.doecs.com/repository/maven-releases/</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>doecs-maven-releases</id>&lt;!&ndash;这个ID需要与你的release仓库的Repository ID一致&ndash;&gt;-->
+<!--            <url>http://repo.doecs.com/repository/maven-releases/</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>doecs-maven-snapshots</id>&lt;!&ndash;这个ID需要与你的snapshots仓库的Repository ID一致&ndash;&gt;-->
+<!--            <url>http://repo.doecs.com:65031/repository/maven-snapshots/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
+
+    <!-- 这里id对应 Settings.xml 中server的id,为了验证server中设置的用户名、密码 -->
     <distributionManagement>
-        <repository>
-            <id>maven-releases</id><!--这个ID需要与你的release仓库的Repository ID一致-->
-            <url>http://repo.doecs.com/repository/maven-releases/</url>
-        </repository>
         <snapshotRepository>
-            <id>maven-snapshots</id><!--这个ID需要与你的snapshots仓库的Repository ID一致-->
-            <url>http://repo.doecs.com:65031/repository/maven-snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.ini</include>
+                    <include>**/*.ftl</include>
+                </includes>
+                <!--可替换资源文件中的环境配置参数-->
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <!--编译插件-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.3</version>
+                    <configuration>
+                        <source>${java-version}</source>
+                        <target>${java-version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <!--显示错误的位置-->
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                    </configuration>
+                </plugin>
+                <!-- doc plugin,Maven API文档生成插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <charset>UTF-8</charset>
+                        <docencoding>UTF-8</docencoding>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <additionalJOption>-Xdoclint:none</additionalJOption>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- resources plugin,Maven 资源插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- gpg plugin,用于签名认证 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--staging puglin,用于自动执行发布阶段(免手动)-->
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.7</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                <!-- release plugin,用于发布到release仓库部署插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.4.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
     <dependencies>
         <dependency>
             <groupId>com.doecs</groupId>

@@ -93,7 +93,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 	}
 	/**
 	 * 驼峰法转下划线
-	 * ex. UnderLine2MePC -> under_line2_me_p_c
+	 * ex. UnderLine2MePC to under_line2_me_p_c
 	 * @param line 源字符串
 	 * @return 转换后的字符串
 	 */
