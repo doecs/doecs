@@ -47,7 +47,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java-version>1.8</java-version>
         <commons-io.version>1.4</commons-io.version>
-        <jackson.version>2.8.9</jackson.version>
+        <jackson.version>2.9.10.5</jackson.version>
         <junit.version>4.12</junit.version>
         <log4j.version>2.8.2</log4j.version>
         <org.apache.commons-lang3.version>3.6</org.apache.commons-lang3.version>
